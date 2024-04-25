@@ -1,3 +1,6 @@
+// original repo https://github.com/asg02fever/NodeMCU-1.0-ESP-12E-Moodule-
+// made by keebasg https://linktr.ee/keebasg
+
 #include <ESP8266WiFi.h>
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
@@ -78,12 +81,13 @@ void loop() {
         dnsServer.stop();
       }
       display.clearDisplay();
+      display.setRotation(2); // Rotate the display 180 degrees set to 0 or 2 
       display.setCursor(15, 0);
       display.setTextSize(2);
       display.println(F("Server")); // Yellow text
       display.setCursor(15, 20);
-      display.setTextSize(2);
-      display.println(servingPortal ? F("ONLINE") : F("OFFLINE")); // Online status in French
+      display.setTextSize(2);  
+      display.println(servingPortal ? F("ONLINE;)") : F("OFFLINE:(")); // Online status in French
       display.setCursor(15, 55);
       display.setTextSize(1);
       display.println(F("Made by keebasg")); // Credit
@@ -94,12 +98,13 @@ void loop() {
   
   // Update OLED display with the current status
   display.clearDisplay();
+  display.setRotation(2); // Rotate the display 180 degrees set to 0 or 2 
   display.setCursor(15, 0);
   display.setTextSize(2);
   display.println(F("Server")); // Yellow text
   display.setCursor(15, 20);
   display.setTextSize(2);
-  display.println(servingPortal ? F("ONLINE") : F("OFFLINE")); // Online status in French
+  display.println(servingPortal ? F("ONLINE;)") : F("OFFLINE:(")); // Online status in French
   display.setCursor(15, 55);
   display.setTextSize(1);
   display.println(F("Made by keebasg")); // Credit
