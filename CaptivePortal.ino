@@ -1,5 +1,8 @@
 // original repo https://github.com/asg02fever/NodeMCU-1.0-ESP-12E-Moodule-
 // made by keebasg https://linktr.ee/keebasg
+// make changes line 31;32;33;34;35 for html content, line 59 for ssid name and line 87 for the screen orentation
+
+
 
 #include <ESP8266WiFi.h>
 #include <DNSServer.h>
@@ -53,7 +56,7 @@ void setup() {
   // WiFi setup
   WiFi.mode(WIFI_AP);
   WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
-  WiFi.softAP("YOUTUBE KEEBASG"); //replace "YOUTUBE KEEBASG" for "ssid you want"
+  WiFi.softAP("YouTube KeebAsg"); //replace "YOUTUBE KEEBASG" for "ssid you want"
 
   // DNS and web server setup
   dnsServer.start(DNS_PORT, "*", apIP);
@@ -81,7 +84,7 @@ void loop() {
         dnsServer.stop();
       }
       display.clearDisplay();
-      display.setRotation(2); // Rotate the display 180 degrees set to 0 or 2 
+      display.setRotation(0); // Rotate the display 180 degrees set to 0 or 2 
       display.setCursor(15, 0);
       display.setTextSize(2);
       display.println(F("Server")); // Yellow text
