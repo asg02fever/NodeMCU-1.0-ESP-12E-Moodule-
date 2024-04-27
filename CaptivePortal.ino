@@ -1,6 +1,6 @@
 // original repo https://github.com/asg02fever/NodeMCU-1.0-ESP-12E-Moodule-
 // made by keebasg https://linktr.ee/keebasg
-// make changes line 31;32;33;34;35 for html content, line 59 for ssid name and line 87 for the screen orentation
+// make changes line 31;32;33;34;35 for html content, line 75 for ssid name and line 104 for the screen orentation
 
 
 
@@ -15,7 +15,7 @@
 #define OLED_ADDR   0x3C
 // Reset pin not used but required for library
 #define OLED_RESET -1
-#define SCREEN_HEIGHT 64 // Hauteur de l'écran OLED en pixels
+#define SCREEN_HEIGHT 64 // OLED screen height in pixels
 
 Adafruit_SSD1306 display(128, 64, &Wire, OLED_RESET);
 
@@ -36,6 +36,8 @@ String responseHTML = ""
                       "<html><body><img src='./logo.jpg' alt='Image'></body></html>";
 
 const int buttonPin = D1;
+const int rebootButtonPin = D2; // Define the pin for the reboot button
+
 bool servingPortal = true; // Start serving portal by default
 
 void setup() {
@@ -53,6 +55,20 @@ void setup() {
   display.setTextSize(1);
   display.setTextColor(WHITE);
   
+  // Display "keebasg" message for 3 seconds on startup
+  display.setRotation(0); // Rotate the display 180 degrees set to 0 or 2
+  display.setCursor(15, 0);
+  display.setTextSize(2);
+  display.println(F("Server")); // Yellow text 
+  display.setCursor(15, 20);
+  display.setTextSize(2);
+  display.println(F("keebasg"));
+  display.setCursor(15, 40);
+  display.setTextSize(2);
+  display.println(F("starting"));
+  display.display();
+  delay(6000); // Display message for 3 seconds
+  
   // WiFi setup
   WiFi.mode(WIFI_AP);
   WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
@@ -67,6 +83,7 @@ void setup() {
   
   // Button setup
   pinMode(buttonPin, INPUT_PULLUP);
+  pinMode(rebootButtonPin, INPUT_PULLUP); // Set the reboot button pin as input with pull-up resistor
 }
 
 void loop() {
@@ -99,9 +116,17 @@ void loop() {
     }
   }
   
+  // Check if the reboot button is pressed to trigger reboot
+  if (digitalRead(rebootButtonPin) == LOW) {
+    delay(100); // Debounce
+    if (digitalRead(rebootButtonPin) == LOW) {
+      ESP.restart(); // Trigger reboot
+    }
+  }
+  
   // Update OLED display with the current status
   display.clearDisplay();
-  display.setRotation(2); // Rotate the display 180 degrees set to 0 or 2 
+  display.setRotation(0); // Rotate the display 180 degrees set to 0 or 2 
   display.setCursor(15, 0);
   display.setTextSize(2);
   display.println(F("Server")); // Yellow text
