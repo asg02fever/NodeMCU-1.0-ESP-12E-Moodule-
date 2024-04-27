@@ -1,6 +1,6 @@
 // original repo https://github.com/asg02fever/NodeMCU-1.0-ESP-12E-Moodule-
 // made by keebasg https://linktr.ee/keebasg
-// make changes line 31;32;33;34;35 for html content, line 75 for ssid name and line 104 for the screen orentation
+// make changes line 31;32;33;34;35 for html content, line 78 for ssid name and line 107 for the screen orentation
 
 
 
@@ -32,11 +32,14 @@ String responseHTML = ""
                       "<p>https://linktr.ee/keebasg" //link in the page
                       "<p>Ce lien redirige vers une page web" //this link rederect to a web page
                       "<p>avec tout mes reseau" //the web page contain all my social links
-                      "<p>Copiez le lien et utilisez le dans google. </p></body></html>" //instruction for people to copy past the link on google
-                      "<html><body><img src='./logo.jpg' alt='Image'></body></html>";
+                      "<p>Copiez le lien et utilisez le dans google. </p></body></html>"; //instruction for people to copy past the link on google
+                      
 
 const int buttonPin = D1;
 const int rebootButtonPin = D2; // Define the pin for the reboot button
+
+unsigned long buttonPressStartTime = 0; // Variable to store the time when the button is pressed
+bool restartInitiated = false; // Flag to indicate if restart has been initiated
 
 bool servingPortal = true; // Start serving portal by default
 
@@ -67,7 +70,7 @@ void setup() {
   display.setTextSize(2);
   display.println(F("starting"));
   display.display();
-  delay(6000); // Display message for 3 seconds
+  delay(3000); // Display message for 3 seconds
   
   // WiFi setup
   WiFi.mode(WIFI_AP);
@@ -116,12 +119,19 @@ void loop() {
     }
   }
   
-  // Check if the reboot button is pressed to trigger reboot
+  // Check if the reboot button is pressed to trigger restart
   if (digitalRead(rebootButtonPin) == LOW) {
-    delay(100); // Debounce
-    if (digitalRead(rebootButtonPin) == LOW) {
-      ESP.restart(); // Trigger reboot
+    if (!restartInitiated) {
+      buttonPressStartTime = millis(); // Record the time when the button is pressed
+      restartInitiated = true; // Set restart initiated flag
+    } else {
+      // Check if the button has been held down for more than 3 seconds
+      if (millis() - buttonPressStartTime > 2000) {
+        ESP.restart(); // Trigger restart
+      }
     }
+  } else {
+    restartInitiated = false; // Reset restart initiated flag if button is released
   }
   
   // Update OLED display with the current status
