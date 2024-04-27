@@ -22,3 +22,7 @@ set up with ARDUINO IDE
   - Make the changes you want
   - Upload the final code to you NodeMCU-1.0-ESP-12E-Moodule
   - Enjoy
+
+
+Online/Offline button on D1
+restart button on D2 need to stay clicked ( hold for 3 sec till blue led blink ) 
